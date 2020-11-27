@@ -1,12 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import { SWRConfig } from 'swr'
+import './styles/main.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <SWRConfig value={{ fetcher: (url: string) => fetch(url).then(res => res.json()) }}>
+      <App />
+    </SWRConfig>
   </React.StrictMode>,
   document.getElementById('root')
 );

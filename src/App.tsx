@@ -1,26 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useRequest } from './hooks/useRequest'
+import { PokemonCard } from './components/PokemonCard'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+type Poke = {
+  name: string
+  url: string
 }
 
-export default App;
+const App = () => {
+  const { data, error }: { data: { results: Poke[] }, error: any } = useRequest('/pokemon')
+
+  if (error) return <h1>Something went wrong!</h1>
+  if (!data) return <h1>Loading...</h1>
+
+  return (
+    <main className="max-w-6xl p-4 mx-auto my-8 text-center">
+      <h1 className="mb-8 text-3xl text-center text-gray-600 uppercase">Pokedex</h1>
+      <div className="grid items-center justify-center gap-6 grid-cols-fit-card">
+        {data.results.map(pokemon =>
+          <PokemonCard key={pokemon.name} pokemon={pokemon} />
+        )}
+      </div>
+    </main>
+  )
+}
+export default App
